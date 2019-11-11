@@ -1,16 +1,14 @@
 package com.mcc;
 
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-public class CustomSet<T> extends AbstractSet<T> {
+public class CustomArraySet<T> extends HashSet<T> {
 
     private T[] array;
 
-    public CustomSet(T[] array) {
+    public CustomArraySet(T[] array) {
         this.array = array;
+        Arrays.stream(array).forEach(x -> add(x));
     }
 
     @Override
@@ -18,8 +16,6 @@ public class CustomSet<T> extends AbstractSet<T> {
         return new CustomSetIterator();
     }
 
-    // Return the length of the array
-    @Override
     public int size() {
         return array.length;
     }
