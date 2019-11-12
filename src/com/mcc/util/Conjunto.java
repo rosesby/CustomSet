@@ -1,4 +1,6 @@
-package com.mcc;
+package com.mcc.util;
+
+import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -7,12 +9,12 @@ import java.util.stream.Stream;
 /**
  * @author Saul Alonso Palazuelos
  */
-public class CustomLHSet<T> extends LinkedHashSet<T> {
+public class Conjunto<T> extends LinkedHashSet<T> {
 
     /**
      * Constructs a new, empty object instance of type {@link Set}&lt;T&gt
      */
-    public CustomLHSet() {
+    public Conjunto() {
     }
 
     /**
@@ -21,7 +23,7 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
      *
      * @param array T[] array
      */
-    public CustomLHSet(T[] array) {
+    public Conjunto(T[] array) {
         Arrays.stream(array).forEach(x -> add(x));
     }
 
@@ -31,7 +33,7 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
      *
      * @param collection {@link Collection}&lt;T&gt collection)
      */
-    public CustomLHSet(Collection<T> collection) {
+    public Conjunto(Collection<T> collection) {
         super(collection);
     }
 
@@ -43,10 +45,28 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
      * @param collection
      * @return
      */
-    public CustomLHSet<T> union(Collection<T> collection) {
-        CustomLHSet<T> newSet = new CustomLHSet<>(this);
+    public Conjunto<T> union(Collection<T> collection) {
+        Conjunto<T> newSet = new Conjunto<>(this);
         newSet.addAll(collection);
         return newSet;
+    }
+
+    public Conjunto<T> empty(){
+        return new Conjunto<>();
+    }
+
+    public boolean isEmpty(){
+        return size() > 0;
+    }
+
+    @Override
+    public int size() {
+        return super.size();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return super.contains(o);
     }
 
     /**
@@ -57,10 +77,10 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
      * @param collection
      * @return
      */
-    public CustomLHSet<T> intersection(Collection<T> collection) {
+    public Conjunto<T> intersection(Collection<T> collection) {
         Stream<T> resultS = this.stream().filter(x -> collection.contains(x));
         Collection<T> resultC = resultS.collect(Collectors.toSet());
-        return new CustomLHSet<T>(resultC);
+        return new Conjunto<T>(resultC);
     }
 
     /**
@@ -71,33 +91,33 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
      * @param collection
      * @return
      */
-    public CustomLHSet<T> difference(Collection<T> collection) {
+    public Conjunto<T> difference(Collection<T> collection) {
         Stream<T> resultS = this.stream().filter(x -> !collection.contains(x));
         Collection<T> resultC = resultS.collect(Collectors.toSet());
-        return new CustomLHSet<T>(resultC);
+        return new Conjunto<T>(resultC);
     }
 
     public boolean subset(Collection<T> collection) {
-        return this.stream().allMatch(x -> collection.contains(x));
+        return collection.stream().allMatch(x -> this.contains(x));
     }
 
     public boolean subsetP(Collection<T> collection) {
-        boolean allMatch = this.stream().allMatch(x -> collection.contains(x));
+        boolean allMatch = collection.stream().allMatch(x -> this.contains(x));
         return allMatch && !this.equals(collection);
     }
 
-    public CustomLHSet complement(Collection<T> collectionUniverse) {
+    public Conjunto complement(Collection<T> collectionUniverse) {
         Stream<T> resultS = collectionUniverse.stream().filter(x -> !this.contains(x));
         Collection<T> resultC = resultS.collect(Collectors.toSet());
-        return new CustomLHSet<T>(resultC);
+        return new Conjunto<T>(resultC);
     }
 
-    public CustomLHSet<CustomPair<T, Object>> productC(Collection<? extends Object> collection) {
-        CustomLHSet set1 = this;
-        CustomLHSet set2 = new CustomLHSet(collection);
+    public <E> Conjunto<Par<T, E>> productC(Collection<E> collection) {
+        Conjunto set1 = this;
+        Conjunto set2 = new Conjunto(collection);
 
-        CustomLHSet<CustomPair<T, Object>> pairs = new CustomLHSet<>();
-        this.forEach(x -> collection.forEach(y -> pairs.add(new CustomPair<>(x, y))));
+        Conjunto<Par<T, E>> pairs = new Conjunto<>();
+        this.forEach(x -> collection.forEach(y -> pairs.add(new Par<>(x, y))));
 
         return pairs;
     }
@@ -106,9 +126,9 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
         return Math.pow(2d, this.size());
     }
 
-    public CustomLHSet<CustomLHSet<T>> pow() {
+    public Conjunto<Conjunto<T>> pow() {
         List<T> list = new ArrayList<>(this);
-        CustomLHSet<CustomLHSet<T>> newSets = new CustomLHSet<>();
+        Conjunto<Conjunto<T>> newSets = new Conjunto<>();
         int setSize = this.size();
 
         //Loop runs from 0 to 2^setSize
@@ -116,7 +136,7 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
             int actualElementBitNumer = 1;
             // Print current subset
 
-            CustomLHSet<T> newSet = new CustomLHSet<T>();
+            Conjunto<T> newSet = new Conjunto<T>();
             for (int j = 0; j < setSize; j++) {
                 int im = i & actualElementBitNumer;
                 String ib = Integer.toBinaryString(i);
@@ -137,9 +157,15 @@ public class CustomLHSet<T> extends LinkedHashSet<T> {
     }
 
     public void print(String setName) {
-        String name = setName;
-        String tostr = this.toString();
-        System.out.println(setName + " : " + tostr);
+        System.out.println(setName + " : " + this);
+    }
+
+    public Conjunto<T> clone(){
+       return SerializationUtils.clone(this);
+    }
+
+    public List<T> toList(){
+        return new ArrayList<T>(this);
     }
 
     @Override

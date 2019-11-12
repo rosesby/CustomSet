@@ -1,4 +1,4 @@
-package com.mcc;
+package com.mcc.util;
 
 import java.util.*;
 

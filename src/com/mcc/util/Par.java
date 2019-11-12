@@ -1,10 +1,10 @@
-package com.mcc;
+package com.mcc.util;
 
 import javafx.util.Pair;
 
-public class CustomPair<K,V> extends Pair<K,V>{
+public class Par<K,V> extends Pair<K,V>{
 
-    public CustomPair(K key, V value) {
+    public Par(K key, V value) {
         super(key, value);
     }
 
