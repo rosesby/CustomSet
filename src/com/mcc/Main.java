@@ -1,10 +1,12 @@
 package com.mcc;
 
-import com.mcc.util.Conjunto;
+import com.mcc.model.Conjunto;
+import com.mcc.model.Person;
+import com.mcc.model.Sex;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author Saul Alonso Palazuelos
@@ -12,8 +14,51 @@ import java.util.List;
  */
 
 public class Main {
-
     public static void main(String[] args) {
+        //test0();
+        //test1();
+        test2();
+    }
+
+    private static void test1() {
+        Conjunto<Object> a = new Conjunto<>();
+
+        Integer[] ints = new Integer[]{1,2,3,3};
+        Conjunto<Integer> b = new Conjunto<Integer>(ints);
+
+        Collection<String> nombres = new ArrayList<>();
+        nombres.add("Victor");
+        nombres.add("Misael");
+        nombres.add("Saul");
+        Conjunto<String> c = new Conjunto<>(nombres);
+
+        Conjunto n = new Conjunto();
+    }
+
+    private static void test2(){
+        Conjunto<Person> p1 = new Conjunto();
+        Conjunto<Person> p2 = new Conjunto();
+
+        Person victor = new Person("Victor", "Batiz", Sex.M, LocalDate.of(1990,2,1));
+        Person saul = new Person("Saul", "Alonso", Sex.M, LocalDate.of(1995,8,7));
+        Person misael = new Person("Misael", "Zazueta", Sex.M, LocalDate.of(1995,8,7));
+        Person plata = new Person("Luis Marcos", "Plata", Sex.M, LocalDate.of(1995,8,7));
+
+        p1.add(victor);
+        p1.add(saul);
+        p1.add(plata);
+
+        p2.add(victor);
+        p2.add(saul);
+        p2.add(misael);
+
+        var p3 = p1.union(p2);
+
+        System.out.println(p3.contains(misael));
+        System.out.println(p3.contains(1));
+    }
+
+    private static void test0(){
         System.out.println("+++String Sets+++");
 
         String[] strings1 = new String[]{"A", "AB", "B"};
@@ -104,4 +149,5 @@ public class Main {
         var clonedSet = set1.clone();
         clonedSet.print("Cloned Set1");
     }
+
 }

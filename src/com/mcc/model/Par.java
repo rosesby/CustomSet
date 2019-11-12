@@ -1,4 +1,4 @@
-package com.mcc.util;
+package com.mcc.model;
 
 import javafx.util.Pair;
 
