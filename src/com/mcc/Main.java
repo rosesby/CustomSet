@@ -17,7 +17,31 @@ public class Main {
     public static void main(String[] args) {
         //test0();
         //test1();
-        test2();
+        //test2();
+        test3();
+    }
+
+    private static void test3() {
+        Integer[] i1 = {1,2,3};
+        Integer[] i2 = {5,7,9};
+        Integer[] i3 = {1};
+
+        Conjunto<Integer> c1 = new Conjunto<>(i1);
+        Conjunto<Integer> c2 = new Conjunto<>(i2);
+        Conjunto<Integer> c3 = new Conjunto<>(i3);
+
+        Conjunto[] e4 = {c1,c2,c3};
+
+        Conjunto<Conjunto<Integer>> c4 = new Conjunto<>(e4);
+
+        c4.print();
+
+        System.out.println("c4 contains c3 " + c4.contains(c3));
+
+        c1 = c1.difference(c3);
+
+        c1.print();
+        c3.print();
     }
 
     private static void test1() {

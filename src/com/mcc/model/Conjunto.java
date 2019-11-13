@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * @author Saul Alonso Palazuelos
  */
-public class Conjunto<T> extends LinkedHashSet<T> {
+public class Conjunto<T extends Object> extends LinkedHashSet<T> {
 
     /**
      * Constructs a new, empty object instance of type {@link Set}&lt;T&gt
@@ -20,7 +20,6 @@ public class Conjunto<T> extends LinkedHashSet<T> {
     /**
      * Constructs a new object instance of type {@link Set}&lt;T&gt
      * with the same elements as the specified T[] array
-     *
      * @param array T[] array
      */
     public Conjunto(T[] array) {
@@ -30,78 +29,50 @@ public class Conjunto<T> extends LinkedHashSet<T> {
     /**
      * Constructs a new an object instance of type {@link Set}&lt;T&gt
      * with the same elements as the specified T[] array
-     *
-     * @param collection {@link Collection}&lt;T&gt collection)
      */
     public Conjunto(Collection<T> collection) {
         super(collection);
     }
 
     /**
-     * Sean A y B dos conjuntos.
-     * La unión de A con B es el conjunto de aquellos elementos
+     * La unión de los conjuntos A y B
+     * es el conjunto de aquellos elementos
      * que están en A o que están en B.
-     *
-     * @param collection
-     * @return
      */
-    public Conjunto<T> union(Collection<T> collection) {
-        Conjunto<T> newSet = new Conjunto<>(this);
-        newSet.addAll(collection);
+    public Conjunto<Object> union(Conjunto<? extends Object> c) {
+        Conjunto<Object> newSet = new Conjunto<>();
+        newSet.addAll(c);
+        newSet.addAll(this);
         return newSet;
     }
 
-    public Conjunto<T> empty(){
-        return new Conjunto<>();
-    }
-
-    public boolean isEmpty(){
-        return size() > 0;
-    }
-
-    @Override
-    public int size() {
-        return super.size();
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return super.contains(o);
-    }
-
     /**
-     * Sean A y B dos conjuntos.
-     * La intersección de A con B es el conjunto de aquellos elementos
+     * La intersección de los conjuntos A y B
+     * es el conjunto de aquellos elementos
      * que están en A y que están en B.
-     *
-     * @param collection
-     * @return
      */
-    public Conjunto<T> intersection(Collection<T> collection) {
-        Stream<T> resultS = this.stream().filter(x -> collection.contains(x));
-        Collection<T> resultC = resultS.collect(Collectors.toSet());
-        return new Conjunto<T>(resultC);
+    public Conjunto<Object> intersection(Conjunto<? extends Object> c) {
+        Stream<? extends Object> resultS = this.stream().filter(x -> c.contains(x));
+        Collection<Object> resultC = resultS.collect(Collectors.toSet());
+        return new Conjunto<Object>(resultC);
     }
 
     /**
-     * Sean A y B dos conjuntos.
-     * La diferencia de A con B es el conjunto de aquellos elementos
+     * La diferencia de los conjuntos A y B
+     * es el conjunto de aquellos elementos
      * que están en A y que no están en B.
-     *
-     * @param collection
-     * @return
      */
-    public Conjunto<T> difference(Collection<T> collection) {
-        Stream<T> resultS = this.stream().filter(x -> !collection.contains(x));
+    public Conjunto<T> difference(Conjunto<? extends Object> c) {
+        Stream<T> resultS = this.stream().filter(x -> !c.contains(x));
         Collection<T> resultC = resultS.collect(Collectors.toSet());
         return new Conjunto<T>(resultC);
     }
 
-    public boolean subset(Collection<T> collection) {
-        return collection.stream().allMatch(x -> this.contains(x));
+    public boolean subset(Collection<T> set) {
+        return set.stream().allMatch(x -> this.contains(x));
     }
 
-    public boolean subsetP(Collection<T> collection) {
+    public boolean subsetP(Set<T> collection) {
         boolean allMatch = collection.stream().allMatch(x -> this.contains(x));
         return allMatch && !this.equals(collection);
     }
@@ -151,6 +122,25 @@ public class Conjunto<T> extends LinkedHashSet<T> {
         }
         return newSets;
     }
+
+    public Conjunto<T> empty(){
+        return new Conjunto<>();
+    }
+
+    public boolean isEmpty(){
+        return size() > 0;
+    }
+
+    @Override
+    public int size() {
+        return super.size();
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return super.contains(o);
+    }
+
 
     public void print() {
         System.out.println(this.toString());
