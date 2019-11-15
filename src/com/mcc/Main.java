@@ -122,9 +122,9 @@ public class Main {
         n = c.union(b);
         n.print("Conjunto n");
 
-
         System.out.println("\n+++Pruebas clase personas+++");
 
+        System.out.println(b.contains("321"));
         Conjunto<Person> p1 = new Conjunto();
         Conjunto<Person> p2 = new Conjunto();
 

@@ -9,8 +9,7 @@ import java.util.stream.Stream;
 /**
  * @author Saul Alonso Palazuelos
  */
-public class Conjunto<T extends Object> extends LinkedHashSet<T> {
-
+public class Conjunto<T extends Object> extends LinkedHashSet<T>  {
     /**
      * Constructs a new, empty object instance of type {@link Set}&lt;T&gt
      */
@@ -33,6 +32,10 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
     public Conjunto(Collection<T> collection) {
         super(collection);
     }
+
+/*    private <E extends Collection> boolean addAll(E c){
+        return lhs.addAll(c);
+    }*/
 
     /**
      * La unión de los conjuntos A y B
@@ -68,14 +71,11 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
         return new Conjunto<T>(resultC);
     }
 
-    public boolean subset(Collection<T> set) {
-        return set.stream().allMatch(x -> this.contains(x));
+    public boolean subset(Conjunto<T> c) {
+        return c.stream().allMatch(x -> this.contains(x));
     }
 
-    public boolean subsetP(Set<T> collection) {
-        boolean allMatch = collection.stream().allMatch(x -> this.contains(x));
-        return allMatch && !this.equals(collection);
-    }
+    public boolean subsetP(Conjunto<T> c) { return subset(c) && !this.equals(c); }
 
     public Conjunto complement(Collection<T> collectionUniverse) {
         Stream<T> resultS = collectionUniverse.stream().filter(x -> !this.contains(x));
@@ -83,13 +83,9 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
         return new Conjunto<T>(resultC);
     }
 
-    public <E> Conjunto<Par<T, E>> productC(Collection<E> collection) {
-        Conjunto set1 = this;
-        Conjunto set2 = new Conjunto(collection);
-
+    public <E> Conjunto<Par<T, E>> productC(Conjunto<E> c) {
         Conjunto<Par<T, E>> pairs = new Conjunto<>();
-        this.forEach(x -> collection.forEach(y -> pairs.add(new Par<>(x, y))));
-
+        this.forEach(x -> c.forEach(y -> pairs.add(new Par<>(x, y))));
         return pairs;
     }
 
@@ -123,10 +119,6 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
         return newSets;
     }
 
-    public Conjunto<T> empty(){
-        return new Conjunto<>();
-    }
-
     public boolean isEmpty(){
         return size() > 0;
     }
@@ -140,7 +132,6 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
     public boolean contains(Object o) {
         return super.contains(o);
     }
-
 
     public void print() {
         System.out.println(this.toString());
@@ -170,8 +161,12 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T> {
         return "{ " + strBuilder + " }";
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
+ /*   @Override
+    private boolean equals(Object o){
+      return super.equals(o);
+    }*/
+    
+    public boolean equals(Conjunto<T> t) {
+        return super.equals(t);
     }
 }
