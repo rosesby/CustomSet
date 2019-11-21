@@ -2,6 +2,8 @@ package com.mcc.model;
 
 import org.apache.commons.lang3.SerializationUtils;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,7 +11,18 @@ import java.util.stream.Stream;
 /**
  * @author Saul Alonso Palazuelos
  */
-public class Conjunto<T extends Object> extends LinkedHashSet<T>  {
+public class Conjunto<T> extends LinkedHashSet<T>  {
+
+    private final Type type = ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+
+    public Type getType(){
+        return type;
+    }
+
+    public String getTypeNameString(){
+        return this.getClass().getCanonicalName();
+    }
+
     /**
      * Constructs a new, empty object instance of type {@link Set}&lt;T&gt
      */
@@ -42,10 +55,17 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T>  {
      * es el conjunto de aquellos elementos
      * que están en A o que están en B.
      */
-    public Conjunto<Object> union(Conjunto<? extends Object> c) {
-        Conjunto<Object> newSet = new Conjunto<>();
-        newSet.addAll(c);
+    public <E> Conjunto union(Conjunto<E> c) {
+        Conjunto newSet = new Conjunto<>();
         newSet.addAll(this);
+        newSet.addAll(c);
+        return newSet;
+    }
+
+    public <E> Conjunto<E> union2(Conjunto<?> b) {
+        Conjunto newSet = new Conjunto<>();
+        newSet.addAll(this);
+        newSet.addAll(b);
         return newSet;
     }
 
@@ -54,10 +74,18 @@ public class Conjunto<T extends Object> extends LinkedHashSet<T>  {
      * es el conjunto de aquellos elementos
      * que están en A y que están en B.
      */
-    public Conjunto<Object> intersection(Conjunto<? extends Object> c) {
-        Stream<? extends Object> resultS = this.stream().filter(x -> c.contains(x));
+    public Conjunto intersection(Conjunto<?> c) {
+        Stream<?> resultS = this.stream().filter(x -> c.contains(x));
         Collection<Object> resultC = resultS.collect(Collectors.toSet());
-        return new Conjunto<Object>(resultC);
+        return new Conjunto(resultC);
+    }
+
+    private static Class<?> getCommonSuperclass(Class<?> a, Class<?> b) {
+        Class<?> s = a;
+        while (!s.isAssignableFrom(b)) {
+            s = s.getSuperclass();
+        }
+        return s;
     }
 
     /**

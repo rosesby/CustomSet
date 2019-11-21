@@ -1,12 +1,11 @@
 package com.mcc;
 
-import com.mcc.model.Conjunto;
-import com.mcc.model.Person;
-import com.mcc.model.Sex;
+import com.mcc.model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Saul Alonso Palazuelos
@@ -19,7 +18,45 @@ public class Main {
         //test1();
         //test2();
         //test3();
-        test4();
+        //test4();
+
+        Conjunto<Integer> ci1 = new Conjunto<>(new Integer[]{1, 2, 3, 4, 5});
+        Conjunto<Integer> ci2 = new Conjunto<>(new Integer[]{6, 7, 8, 9, 10});
+        Conjunto<String> cs1 = new Conjunto<>(new ArrayList<>(List.of("victor","Saul","Misael")));
+        Conjunto<String> cs2 = new Conjunto<>(new ArrayList<>(List.of("manuel","glenn","oscar")));
+
+        Conjunto<?> ci3 = ci1.union(ci2);
+
+        ci3.print();
+
+        System.out.println( ci1.getTypeNameString());
+        System.out.println( cs1.getTypeNameString());
+        System.out.println( ci3.getTypeNameString());
+
+        Student victor = new Student("Victor", "Batiz", Sex.M, LocalDate.of(1990,2,1), 28383);
+        Student saul = new Student("Saul", "Alonso", Sex.M, LocalDate.of(1995,8,7), 28384);
+        Student misael = new Student("Misael", "Zazueta", Sex.M, LocalDate.of(1995,8,7), 28385);
+        Student plata = new Student("Luis Marcos", "Plata", Sex.M, LocalDate.of(1995,8,7), 28386);
+
+        Teacher barron = new Teacher("Lucía", "Barron", Sex.F, LocalDate.of(1990,4,5),1002,Grade.PHD);
+        Teacher ramon = new Teacher("Ramón", "Zatarain", Sex.M, LocalDate.of(1990,3,1),1001,Grade.PHD);
+
+        Conjunto<Student> student = new Conjunto<>();
+        Conjunto<Teacher> teachers = new Conjunto<>();
+
+        student.add(victor);
+        student.add(saul);
+        student.add(misael);
+        student.add(plata);
+
+        teachers.add(barron);
+        teachers.add(ramon);
+
+        Conjunto<Person> personas1 = student.union(teachers);
+        Conjunto<Person> personas2 = student.union2(teachers);
+        personas1.print("Union");
+        personas2.print("Union");
+
     }
 
     private static void test4() {
