@@ -20,18 +20,10 @@ public class Main {
         //test3();
         //test4();
 
-        Conjunto<Integer> ci1 = new Conjunto<>(new Integer[]{1, 2, 3, 4, 5});
-        Conjunto<Integer> ci2 = new Conjunto<>(new Integer[]{6, 7, 8, 9, 10});
-        Conjunto<String> cs1 = new Conjunto<>(new ArrayList<>(List.of("victor","Saul","Misael")));
-        Conjunto<String> cs2 = new Conjunto<>(new ArrayList<>(List.of("manuel","glenn","oscar")));
-
-        Conjunto<?> ci3 = ci1.union(ci2);
-
-        ci3.print();
-
-        System.out.println( ci1.getTypeNameString());
-        System.out.println( cs1.getTypeNameString());
-        System.out.println( ci3.getTypeNameString());
+        Conjunto<Integer> integer1 = new Conjunto<>(new Integer[]{1, 2, 3, 4, 5});
+        Conjunto<Integer> integer2 = new Conjunto<>(new Integer[]{6, 7, 8, 9, 10});
+        Conjunto<String> string1 = new Conjunto<>(new ArrayList<>(List.of("victor","Saul","Misael")));
+        Conjunto<String> string2 = new Conjunto<>(new ArrayList<>(List.of("manuel","glenn","oscar")));
 
         Student victor = new Student("Victor", "Batiz", Sex.M, LocalDate.of(1990,2,1), 28383);
         Student saul = new Student("Saul", "Alonso", Sex.M, LocalDate.of(1995,8,7), 28384);
@@ -57,6 +49,7 @@ public class Main {
         personas1.print("Union");
         personas2.print("Union");
 
+        integer1.union(string1).union(teachers).print("Remix");
     }
 
     private static void test4() {
